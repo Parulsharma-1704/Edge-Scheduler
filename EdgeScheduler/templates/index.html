@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edge Computing Task Scheduler</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            padding: 10px;
+            background: #0D0221; /* Dark Purple-Black */
+            color: #26408B; /* Deep Blue for text */
+            line-height: 1.4;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 50px auto;
+            padding: 15px;
+            background: #A6CFD5; /* Light Cyan */
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        h1 {
+            text-align: center;
+            color: #26408B; /* Deep Blue */
+            text-shadow: 0 0 8px rgba(38, 64, 139, 0.5);
+            margin-bottom: 10px;
+            animation: fadeIn 1s ease-in;
+        }
+        .section {
+            background: #FFFFFF; /* White */
+            border-radius: 8px;
+            padding: 8px;
+            margin-bottom: 8px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(38, 64, 139, 0.3); /* Deep Blue glow */
+        }
+        form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            align-items: center;
+        }
+        label {
+            font-weight: bold;
+            color: #26408B; /* Deep Blue */
+        }
+        input[type="text"] {
+            flex: 1;
+            padding: 6px;
+            border: 2px solid #26408B; /* Deep Blue border */
+            border-radius: 4px;
+            background: #FFFFFF; /* White */
+            color: #26408B; /* Deep Blue text */
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+        input[type="text"]:focus {
+            border-color: #0F084B; /* Very Dark Blue */
+            outline: none;
+        }
+        input[type="submit"], button {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 4px;
+            background: #0F084B; /* Very Dark Blue */
+            color: #A6CFD5; /* Light Cyan text for contrast */
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+        input[type="submit"]:hover, button:hover {
+            background: #26408B; /* Deep Blue on hover */
+            transform: scale(1.05);
+        }
+        .error {
+            color: #26408B; /* Deep Blue */
+            font-weight: bold;
+            margin-top: 4px;
+            animation: shake 0.5s ease;
+        }
+        h3 {
+            color: #26408B; /* Deep Blue */
+            margin-bottom: 6px;
+            text-shadow: 0 0 4px rgba(38, 64, 139, 0.3);
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            background: #FFFFFF; /* White */
+            padding: 6px;
+            margin: 1px 0;
+            border-radius: 4px;
+            transition: background 0.3s ease;
+        }
+        li:hover {
+            background: #F0F0F0; /* Slightly off-white on hover */
+        }
+        .log-box {
+            background: #FFFFFF; /* White */
+            border: 2px solid #26408B; /* Deep Blue */
+            border-radius: 4px;
+            padding: 8px;
+            max-height: 180px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            color: #26408B; /* Deep Blue */
+        }
+        .log-box p {
+            margin: 2px 0;
+            padding: 0;
+        }
+        .log-box::-webkit-scrollbar {
+            width: 5px;
+        }
+        .log-box::-webkit-scrollbar-thumb {
+            background: #0F084B; /* Very Dark Blue */
+            border-radius: 2px;
+        }
+        p.status {
+            font-weight: bold;
+            color: #0F084B; /* Very Dark Blue */
+            background: #FFFFFF; /* White */
+            padding: 6px;
+            border-radius: 4px;
+            margin: 0;
+        }
+        p.summary {
+            font-weight: bold;
+            color: #0F084B; /* Very Dark Blue */
+            background: #FFFFFF; /* White */
+            padding: 10px;
+            border-radius: 4px;
+            margin: 0;
+            text-align: center;
+            font-size: 18px; /* Increased from 16px */
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-4px); }
+            75% { transform: translateX(4px); }
+        }
+        @media (max-width: 600px) {
+            .container { padding: 10px; }
+            form { flex-direction: column; align-items: stretch; }
+            input[type="text"] { width: 100%; }
+            .section { padding: 6px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Edge Computing Task Scheduler</h1>
+        <div class="section">
+            <form method="POST" action="/">
+                <label>Enter Data Values (e.g., '25.0 26.8 24.7 100.0'):</label>
+                <input type="text" name="data_input" placeholder="e.g., 25.0 26.8 24.7 100.0">
+                <input type="submit" value="Submit Task">
+                <button type="button" onclick="location.reload();">Refresh</button>
+            </form>
+            {% if error %}
+                <p class="error">{{ error }}</p>
+            {% endif %}
+        </div>
+        <div class="section">
+            <h3>Submitted Tasks</h3>
+            <ul>
+                {% for task_id, data in tasks %}
+                    <li>Task {{ task_id }}: {{ data }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="section">
+            <h3>Task Status</h3>
+            <ul>
+                {% for task_id, (state, value) in task_status.items() %}
+                    <li>Task {{ task_id }}: {{ value if state == "completed" else state.capitalize() }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="section">
+            <h3>System Status</h3>
+            <p class="status">{{ status }}</p>
+        </div>
+        {% if summary %}
+        <div class="section">
+            <h3>Final Summary</h3>
+            <p class="summary">{{ summary }}</p>
+        </div>
+        {% endif %}
+        <div class="section">
+            <h3>Logs</h3>
+            <div class="log-box">
+                {% for log in logs %}
+                    <p>{{ log }}</p>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="section">
+            <form method="POST" action="/summary">
+                <input type="submit" value="Show Summary">
+            </form>
+        </div>
+    </div>
+</body>
+</html>
