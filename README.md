@@ -1,1 +1,2 @@
 # Edge-Scheduler
+The Fault-Tolerant Task Scheduler in Edge Computing project aims to build a reliable system that ensures tasks are executed efficiently even when edge devices fail or become unavailable. In edge computing, data is processed near the source (like IoT devices) to reduce delay and network load. However, edge nodes often face issues like limited power, storage, or unstable connections. The goal is to maintain high availability, minimize task loss, and improve the overall resilience of edge-based systems.
